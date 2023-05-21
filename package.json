@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "pidusage": "^3.0.2",
+    "puppeteer": "^20.2.1",
+    "systeminformation": "^5.17.12"
+  }
+}
