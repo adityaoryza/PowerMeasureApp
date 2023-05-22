@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>System Usage Monitor</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    .container {
+      margin-top: 20px;
+    }
+
+    .result {
+      font-family: monospace;
+      white-space: pre;
+    }
+
+    .progress-bar {
+      transition: width 0.3s ease-in-out;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="mb-4">System Usage Monitor</h1>
+    <div class="row mb-3">
+      <div class="col-auto">
+        <label for="processName" class="col-form-label">Enter process name:</label>
+      </div>
+      <div class="col-auto">
+        <input type="text" class="form-control" id="processName" name="processName">
+      </div>
+      <div class="col-auto">
+        <button id="monitorButton" class="btn btn-primary">Monitor</button>
+      </div>
+    </div>
+    <pre id="result" class="result"></pre>
+    <div class="row">
+      <div class="col">
+        <div class="mb-2">CPU Usage:</div>
+        <div class="progress">
+          <div id="cpuBar" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="mb-2">Memory Usage:</div>
+        <div class="progress">
+          <div id="memBar" class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateUsage(processName) {
+      fetch(`/usage?processName=${processName}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const cpuUsage = data.cpuUsage.toFixed(2);
+          const memUsage = data.memUsage.toFixed(2);
+
+          const cpuBar = `${cpuUsage}%`;
+          const memBar = `${memUsage}%`;
+
+          const result = `CPU Usage: ${cpuUsage}%\nMem Usage: ${memUsage}%`;
+          document.getElementById("result").textContent = result;
+
+          // Update the progress bars width dynamically
+          document.getElementById("cpuBar").style.width = cpuBar;
+          document.getElementById("memBar").style.width = memBar;
+        })
+        .catch((error) => {
+          console.error("Error occurred while fetching usage data:", error);
+          document.getElementById("result").textContent = "Error occurred while fetching usage data";
+        });
+    }
+
+    document.getElementById("monitorButton").addEventListener("click", () => {
+      const processName = document.getElementById("processName").value;
+      updateUsage(processName);
+
+      // Refresh the usage data every second
+      setInterval(() => {
+        updateUsage(processName);
+      }, 1000);
+    });
+  </script>
+</body>
+
+</html>
