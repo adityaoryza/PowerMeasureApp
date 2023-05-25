@@ -6,13 +6,7 @@ const { exec } = require("child_process");
 const app = express();
 const port = 3030;
 
-app.set("view engine", "ejs");
-
-app.get("/", (req, res) => {
-  res.render("index");
-});
-
-app.get("/usage", (req, res) => {
+app.get("/usage", async (req, res) => {
   const processName = req.query.processName;
 
   exec(`pgrep -x ${processName}`, async (error, stdout, stderr) => {
@@ -33,20 +27,20 @@ app.get("/usage", (req, res) => {
 
     const pid = stdout.trim();
     if (!pid) {
-      res.send(`No process named ${processName} found.`);
+      res.status(404).json({ error: `No process named ${processName} found.` });
       return;
     }
 
     try {
       const [cpuStats, memStats] = await Promise.all([pidusage(pid), si.mem()]);
 
-      const cpuUsage = cpuStats.cpu;
-      const memUsage = (memStats.used / memStats.total) * 100;
+      const cpuUsage = cpuStats.cpu.toFixed(2); // Round to 2 decimal places
+      const memUsage = (memStats.used / (1024 * 1024)).toFixed(2); // Convert to MB and round to 2 decimal places
 
-      res.json({ cpuUsage, memUsage });
+      res.json({ cpuUsage: `${cpuUsage}%`, memUsage: `${memUsage} MB` });
     } catch (error) {
       console.error("Error occurred while monitoring system usage:", error);
-      res.send("Error occurred while monitoring system usage");
+      res.status(500).send("Error occurred while monitoring system usage");
     }
   });
 });
