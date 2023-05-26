@@ -2,6 +2,8 @@
 
 The Power Measuring Application is a web application that allows users to monitor the CPU and memory usage of a specific process. It consists of an API server built with Express.js and a React client for the user interface.
 
+<img src="./ImageReadme/UI.png" alt="UI Image">
+
 ## API Documentation
 
 ### Homepage Endpoint
