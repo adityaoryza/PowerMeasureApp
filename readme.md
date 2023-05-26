@@ -1,8 +1,20 @@
 # Power Measuring Application
 
-## Usage Endpoint
+The Power Measuring Application is a web application that allows users to monitor the CPU and memory usage of a specific process. It consists of an API server built with Express.js and a React client for the user interface.
 
-### Request
+## API Documentation
+
+### Homepage Endpoint
+
+- URL: `/`
+- Method: GET
+
+#### Response
+
+- Status: 200 OK
+- Body: Text response: "Welcome to the System Usage API!"
+
+### Usage Endpoint
 
 - URL: `/usage`
 - Method: GET
@@ -11,16 +23,16 @@
 
 - `processName` (required): The name of the process to monitor.
 
-### Response
+#### Response
 
-#### Success
+##### Success
 
 - Status: 200 OK
 - Body: JSON object containing the following properties:
   - `cpuUsage`: The CPU usage of the specified process as a percentage (rounded to 2 decimal places).
   - `memUsage`: The memory usage of the specified process in megabytes (rounded to 2 decimal places).
 
-#### Errors
+##### Errors
 
 - Status: 404 Not Found
 - Body: JSON object with the following property:
@@ -34,7 +46,7 @@
 
 ### App Component
 
-The main component of the React client application.
+The `App` component is the main component of the React client application. It provides a user interface for monitoring system usage.
 
 #### State
 
@@ -68,5 +80,6 @@ The component renders a form with an input field and a submit button for the use
 
 - React: JavaScript library for building user interfaces.
 - axios: Promise-based HTTP client for making API requests.
+- @material-ui/core: Material UI library for UI components.
 
 This documentation provides an overview of the API endpoints and the React client application structure. You can expand on it by adding more details, such as input validation, error handling, and additional API endpoints if applicable.
