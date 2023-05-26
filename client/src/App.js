@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const App = () => {
   const [processName, setProcessName] = useState("");
@@ -64,57 +69,61 @@ const App = () => {
 
   return (
     <div className="container mt-5">
-      <h1 className="mb-4">System Usage</h1>
+      <Typography variant="h4" gutterBottom>
+        System Usage
+      </Typography>
 
       <form onSubmit={handleSubmit}>
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter process name"
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <TextField
+            label="Enter process name"
             value={processName}
             onChange={handleProcessNameChange}
+            style={{ marginRight: "16px" }}
           />
-          <button className="btn btn-primary" type="submit">
+          <Button variant="contained" color="primary" type="submit">
             Fetch Data
-          </button>
+          </Button>
         </div>
       </form>
 
-      {isLoading && <p>Loading...</p>}
-      {error && <p className="text-danger">{error}</p>}
+      {isLoading && (
+        <div style={{ marginTop: "16px" }}>
+          <CircularProgress />
+        </div>
+      )}
+
+      {error && (
+        <Typography variant="body1" color="error" gutterBottom>
+          {error}
+        </Typography>
+      )}
+
       {!isLoading && !error && noProcessMatch && (
-        <p className="text-danger">No process named "{processName}" found.</p>
+        <Typography variant="body1" color="error" gutterBottom>
+          No process named "{processName}" found.
+        </Typography>
       )}
 
       {!isLoading && !error && !noProcessMatch && processName && (
-        <div>
-          <p className="mb-2">CPU Usage: {cpuUsage}</p>
-          <div className="progress mb-4">
-            <div
-              className="progress-bar"
-              role="progressbar"
-              style={{ width: `${cpuUsage}` }}
-              aria-valuenow={cpuUsage}
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              {cpuUsage}
-            </div>
-          </div>
-          <p className="mb-2">Memory Usage: {memUsage} MB</p>
-          <div className="progress">
-            <div
-              className="progress-bar"
-              role="progressbar"
-              style={{ width: `${memUsage}` }}
-              aria-valuenow={memUsage}
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              {memUsage}
-            </div>
-          </div>
+        <div style={{ marginTop: "16px" }}>
+          <Typography variant="body1" gutterBottom>
+            CPU Usage: {cpuUsage}%
+          </Typography>
+          <LinearProgress
+            variant="determinate"
+            value={cpuUsage}
+            style={{ marginBottom: "16px" }}
+          />
+
+          <Typography variant="body1" gutterBottom>
+            Memory Usage: {memUsage} MB
+          </Typography>
+          <LinearProgress
+            variant="determinate"
+            value={memUsage}
+            style={{ marginBottom: "16px" }}
+          />
         </div>
       )}
     </div>

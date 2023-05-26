@@ -6,6 +6,11 @@ const { exec } = require("child_process");
 const app = express();
 const port = 3030;
 
+// Homepage route
+app.get("/", (req, res) => {
+  res.send("Welcome to the System Usage API!");
+});
+
 app.get("/usage", async (req, res) => {
   const processName = req.query.processName;
 
