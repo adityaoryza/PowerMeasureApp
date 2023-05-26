@@ -4,6 +4,16 @@ The Power Measuring Application is a web application that allows users to monito
 
 <img src="./ImageReadme/UI.png" alt="UI Image">
 
+## How to Run the Application
+
+- cd to this program directory
+- cd to server/server.js
+- start the server using npm start
+- while the server is running
+- cd to client/
+- start the react client using npm start
+- the application should be running on localhost:3000/
+
 ## API Documentation
 
 ### Homepage Endpoint
